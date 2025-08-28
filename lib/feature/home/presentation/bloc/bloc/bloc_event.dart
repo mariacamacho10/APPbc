@@ -1,13 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class TareasEvent {}
+abstract class TareaEvent extends Equatable {
+  const TareaEvent();
 
-class AgregarTarea extends TareasEvent {
-  final Tareas tarea;
-  AgregarTarea(this.tarea);
+  @override
+  List<Object?> get props => [];
 }
 
-class CompletarTarea extends TareasEvent {
-  final index;
-  CompletarTarea(this.index);
-}
+// event para cargar las tareas desde el JSON
+class CargarTareas extends TareaEvent {}

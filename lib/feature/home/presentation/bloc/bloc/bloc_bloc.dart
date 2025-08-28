@@ -1,49 +1,43 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package: APPBC/widgets/tareas_model.dart';
-import 'tareas_event.dart';
-import 'tareas_state.dart';
-import 'tareas/cubit/tareas_cubit.dart';
+import 'package:myapp/feature/home/presentation/bloc/bloc/bloc_event.dart';
+import 'package:myapp/feature/home/presentation/bloc/bloc/bloc_state.dart';
+import 'package:myapp/feature/model/modelo';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 
-class TareasBloc extends Bloc<TareasEvent, TareasState> {
-  final TareasCubit tareasCubit; // tiene un cubit que va a usar
 
-  // Empieza el estado inicial
-  TareasBloc(this.tareasCubit) : super(TareasInitial()) {
-    
-    // Carga las tareas al inicio
-    on<CargarTareas>((event, emit) async {
-      emit(TareasLoading());
-      emit(TareasSuccess([])); // Una lista vacía
-    });
+class TareaBloc extends Bloc<TareaEvent, TareaState> {
+  TareaBloc() : super(TareaInicial()) {
+    on<CargarTareas>(_onCargarTareas);
+  }
 
-    // Para agregar una nueva tarea
-    on<AgregarTarea>((event, emit) {
-      if (state is TareasSuccess) {
-      
-        final tareas = List<Tareas>.from((state as TareasSuccess).tareas)
-          ..add(event.tarea); // Se agrega la tarea
+  Future<void> _onCargarTareas(
+    CargarTareas event,
+    Emitter<TareaState> emit,
+  ) async {
+    emit(TareaCargando());
+    try {
+      final tareas = await fetchTarea();
+      emit(TareaSuccess(tareas));
+    } catch (e) {
+      emit(TareaError(e.toString()));
+    }
+  }
 
-        print('Se agregó la tarea');
-        emit(TareasSuccess(tareas)); // Se actualiza el estado con la lista nueva
-      }
-    });
+  Future<List<Tarea>> fetchTarea() async {
+    final url = Uri.parse(
+      "http://jsonblob.com/1409987893673517056",
+    );
 
-    // Una tarea como completada
-    on<CompletarTarea>((event, emit) {
-      if (state is TareasSuccess) {
-        final tareas = List<Tareas>.from((state as TareasSuccess));
-        final tareaTerminada = tareas[event.index];
+    final response = await http.get(url);
 
-        if (tareaTerminada) {
-          tareas[event.index] = tareaTerminada.copyWith(true);
-
-          print('Tarea terminada'); // Muestra cuál se terminó
-          tareasCubit.incrementar(); //  Aumenta
-        }
-
-        emit(TareasSuccess(tareas)); // Actualiza el estado con la lista modificada
-      }
-    });
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final List lista = data["tarea"];
+      return lista.map((t) => Tarea.fromJson(t)).toList();
+    } else {
+      throw Exception("Error: ${response.statusCode}");
+    }
   }
 }

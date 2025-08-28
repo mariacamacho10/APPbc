@@ -1,31 +1,32 @@
 import 'package:equatable/equatable.dart';
-import 'package/APPBC/widgets/tareas_model.dart';
+import 'package:myapp/feature/model/modelo';
 
-abstract class TareasState extends Equatable {
-  const TareasState();
+
+abstract class TareaState extends Equatable {
+  const TareaState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
-class TareasInitial extends TareasState {}
+class TareaInicial extends TareaState {}
 
-class TareasLoading extends TareasState {}
+class TareaCargando extends TareaState {}
 
-class TareasSuccess extends TareasState {
+class TareaSuccess extends TareaState {
   final List<Tarea> tareas;
 
-  const TareasSuccess(this.tareas);
+  const TareaSuccess(this.tareas);
 
   @override
-  List<Object> get props => [tareas];
+  List<Object?> get props => [tareas];
 }
 
-class TareasFailure extends TareasState {
-  final error;
+class TareaError extends TareaState {
+  final String mensaje;
 
-  const TareasFailure(this.error);
+  const TareaError(this.mensaje);
 
   @override
-  List<Object> get props => [error];
+  List<Object?> get props => [mensaje];
 }

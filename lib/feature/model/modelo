@@ -1,0 +1,52 @@
+import 'package:equatable/equatable.dart';
+
+class Tarea extends Equatable {
+  final String? tarea1;
+  final String? tarea2;
+  final String? tarea3;
+  final String? tarea4;
+  final String? tarea5;
+  final String? tarea6;
+  final String? tarea7;
+  final String? tarea8;
+  final String? tarea9;
+
+  const Tarea({
+    this.tarea1,
+    this.tarea2,
+    this.tarea3,
+    this.tarea4,
+    this.tarea5,
+    this.tarea6,
+    this.tarea7,
+    this.tarea8,
+    this.tarea9,
+  });
+
+  @override
+  List<Object?> get props => [
+        tarea1,
+        tarea2,
+        tarea3,
+        tarea4,
+        tarea5,
+        tarea6,
+        tarea7,
+        tarea8,
+        tarea9,
+      ];
+
+  factory Tarea.fromJson(Map<String, dynamic> json) {
+    return Tarea(
+      tarea1: json['tarea1'] as String?,
+      tarea2: json['tarea2'] as String?,
+      tarea3: json['tarea3'] as String?,
+      tarea4: json['tarea4'] as String?,
+      tarea5: json['tarea5'] as String?,
+      tarea6: json['tarea6'] as String?,
+      tarea7: json['tarea7'] as String?,
+      tarea8: json['tarea8'] as String?,
+      tarea9: json['tarea9'] as String?,
+    );
+  }
+}

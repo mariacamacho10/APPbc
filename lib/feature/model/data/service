@@ -1,0 +1,19 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+Future<List<Tarea>> fetchTarea() async {
+  final url = Uri.parse(
+    "http://jsonblob.com/1409987893673517056",
+  );
+
+  final response = await http.get(url);
+
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+
+    final List tarea = data["tarea"];
+    return tarea.map((tarea) => Tarea.fromJson(tarea)).toList();
+  } else {
+    throw Exception("Error: ${response.statusCode}");
+  }
+}

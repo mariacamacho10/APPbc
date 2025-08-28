@@ -1,38 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:APPBC/widgets/tarea_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:myapp/feature/home/presentation/bloc/bloc/bloc_bloc.dart';
+import 'package:myapp/feature/home/presentation/bloc/bloc/bloc_state.dart';
 
-class TareasSuccessView extends StatelessWidget {
-  final List<Tarea> tareas;
-  final Function(int) terminada;
-
-  const TareasSuccessView({super.key, required this.tareas, required this.terminada});
+class SuccessView extends StatelessWidget {
+  const SuccessView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    if (tareas.isEmpty) {
-      return const Center(
-        child: Text ("No hay tareas pendientes"),
-      );
-    }
-
-    return List.builder(
-      itemCount: tareas.length,
-      itemBuilder: (context, index) {
-        final tarea = [index];
-        return ListTile(
-          title: Text(
-            tarea.titulo,
-            style: const TextStyle(color: Colors.white),
-              decoration: tarea.terminada
-                TextDecoration.lineThrough // tacha la tarea
-                TextDecoration.none, // normal
-          
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "LISTA DE PENDIENTES",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.5,
           ),
-          trailing: IconButton( 
-            icon: const Icon(terminada),
-            onPressed: () => terminada(index),
-        );
-      },
+        ),
+        centerTitle: true,
+      ),
+      body: BlocBuilder<TareaBloc, TareaState>(
+        builder: (context, state) {
+          if (state is TareaSuccess) {
+            final tareas = state.tareas; // JSON cargado desde el Bloc
+
+            return ListView.builder(
+              itemCount: tareas.length,
+              itemBuilder: (context, index) {
+                final tarea = tareas[index];
+                return ListTile(
+                  leading: const Icon(Icons.check_box_outline_blank),
+                  title: Text(tarea.tarea1 ?? ''),
+
+                );
+              },
+            );
+          }
+          return const Center(child: Text("Sin tareas"));
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // no hace nada
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

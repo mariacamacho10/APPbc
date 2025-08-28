@@ -1,18 +1,22 @@
-import 'package:APPBC/widgets/tareasterminadas_model.dart';
+
+import 'package:equatable/equatable.dart';
+import 'package:myapp/feature/model/modelo';
 
 
-abstract class TareasTerminadasState {}
+sealed class TareasTerminadasState extends Equatable {
+  const TareasTerminadasState();
+  @override
+  List <Object?> get props=>[];
 
-class TareasTerminadasInitial extends TareasTerminadasState {}
-
-class TareasTerminadasLoading extends TareasTerminadasState {}
-
-class TareasTerminadasSuccess extends TareasTerminadasState {
-  final Tarea tarea;
-  TareasTerminadasSuccess(this.tarea);
 }
 
-class TareasTerminadasFailure extends TareasTerminadasState {
-  final String error;
-  TareasTerminadasFailure(this.error);
+final class TareasTerminadasInitial extends TareasTerminadasState {
+  final List<Tarea> tarea = const [];
+  @override
+  List<Object?> get props => [tarea];
+}
+
+final class TareasTerminadasLoading extends TareasTerminadasState {}
+
+final class TareasTerminadasFailure extends TareasTerminadasState {
 }
